@@ -1,0 +1,14 @@
+{
+    "id": "{CCCE18B9-245A-900F-5DCF-CF11527571CE}",
+    "name": "AlarmanrufNeXXtMobile",
+    "type": 3,
+    "vendor": "UB",
+    "aliases": [
+        "Alarmanruf NeXXt Mobile"
+    ],
+    "url": "https://github.com/ubittner/Alarmanruf/tree/main/NeXXt%20Mobile",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "AANM"
+}

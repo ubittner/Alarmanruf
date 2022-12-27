@@ -1,0 +1,14 @@
+{
+    "id": "{87E8FFF5-2E89-8C9E-3345-9A09D159E4B2}",
+    "name": "AlarmanrufVoIP",
+    "type": 3,
+    "vendor": "UB",
+    "aliases": [
+        "Alarmanruf VoIP"
+    ],
+    "url": "https://github.com/ubittner/Alarmanruf/tree/main/VoIP",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "AAVOIP"
+}

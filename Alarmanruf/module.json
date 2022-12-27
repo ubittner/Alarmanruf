@@ -1,0 +1,14 @@
+{
+    "id": "{FA8543F8-C672-8E9F-A5A9-90103612EBFA}",
+    "name": "Alarmanruf",
+    "type": 3,
+    "vendor": "UB",
+    "aliases": [
+        "Alarmanruf"
+    ],
+    "url": "https://github.com/ubittner/Alarmanruf/tree/main/Alarmanruf",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "AA"
+}
