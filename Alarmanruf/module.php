@@ -9,6 +9,7 @@
  */
 
 /** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection DuplicatedCode */
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
