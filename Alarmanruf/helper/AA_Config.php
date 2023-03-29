@@ -65,23 +65,6 @@ trait AA_Config
             ]
         ];
 
-        $form['elements'][] = [
-            'type'    => 'ExpansionPanel',
-            'caption' => 'Funktionen',
-            'items'   => [
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableActive',
-                    'caption' => 'Aktiv (Schalter im WebFront)'
-                ],
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableAlarmCall',
-                    'caption' => 'Alarmanruf'
-                ]
-            ]
-        ];
-
         //Alarm call
         $alarmCall = $this->ReadPropertyInteger('AlarmCall');
         $enableAlarmCallButton = false;
@@ -447,6 +430,35 @@ trait AA_Config
                     'type'    => 'SelectTime',
                     'name'    => 'AutomaticDeactivationEndTime',
                     'caption' => 'Endzeit'
+                ]
+            ]
+        ];
+
+        //Visualisation
+        $form['elements'][] = [
+            'type'    => 'ExpansionPanel',
+            'caption' => 'Visualisierung',
+            'items'   => [
+                [
+                    'type'    => 'Label',
+                    'caption' => 'WebFront',
+                    'bold'    => true,
+                    'italic'  => true
+                ],
+                [
+                    'type'    => 'Label',
+                    'caption' => 'Anzeigeoptionen',
+                    'italic'  => true
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableActive',
+                    'caption' => 'Aktiv'
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableAlarmCall',
+                    'caption' => 'Alarmanruf'
                 ]
             ]
         ];
