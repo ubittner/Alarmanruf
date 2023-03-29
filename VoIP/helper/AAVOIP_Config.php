@@ -65,23 +65,6 @@ trait AAVOIP_Config
             ]
         ];
 
-        $form['elements'][] = [
-            'type'    => 'ExpansionPanel',
-            'caption' => 'Funktionen',
-            'items'   => [
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableActive',
-                    'caption' => 'Aktiv (Schalter im WebFront)'
-                ],
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableAlarmCall',
-                    'caption' => 'Alarmanruf'
-                ]
-            ]
-        ];
-
         //VoIP
         $voip = $this->ReadPropertyInteger('VoIP');
         $enableVoIPButton = false;
@@ -571,6 +554,35 @@ trait AAVOIP_Config
                     'type'    => 'SelectTime',
                     'name'    => 'AutomaticDeactivationEndTime',
                     'caption' => 'Endzeit'
+                ]
+            ]
+        ];
+
+        //Visualisation
+        $form['elements'][] = [
+            'type'    => 'ExpansionPanel',
+            'caption' => 'Visualisierung',
+            'items'   => [
+                [
+                    'type'    => 'Label',
+                    'caption' => 'WebFront',
+                    'bold'    => true,
+                    'italic'  => true
+                ],
+                [
+                    'type'    => 'Label',
+                    'caption' => 'Anzeigeoptionen',
+                    'italic'  => true
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableActive',
+                    'caption' => 'Aktiv'
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableAlarmCall',
+                    'caption' => 'Alarmanruf'
                 ]
             ]
         ];
