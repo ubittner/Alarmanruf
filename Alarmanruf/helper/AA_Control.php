@@ -372,7 +372,8 @@ trait AA_Control
      */
     private function LockSemaphore($Name): bool
     {
-        for ($i = 0; $i < $this->ReadPropertyInteger('Attempts'); $i++) {
+        $attempts = 1000;
+        for ($i = 0; $i < $attempts; $i++) {
             if (IPS_SemaphoreEnter(__CLASS__ . '.' . $this->InstanceID . '.' . $Name, 1)) {
                 $this->SendDebug(__FUNCTION__, 'Semaphore ' . $Name . ' locked', 0);
                 return true;
