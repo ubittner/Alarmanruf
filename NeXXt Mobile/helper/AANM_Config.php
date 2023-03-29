@@ -67,33 +67,6 @@ trait AANM_Config
 
         $form['elements'][] = [
             'type'    => 'ExpansionPanel',
-            'caption' => 'Funktionen',
-            'items'   => [
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableActive',
-                    'caption' => 'Aktiv (Schalter im WebFront)'
-                ],
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableAlarmCall',
-                    'caption' => 'Alarmanruf'
-                ],
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableGetCurrentBalance',
-                    'caption' => 'Guthaben abfragen'
-                ],
-                [
-                    'type'    => 'CheckBox',
-                    'name'    => 'EnableCurrentBalance',
-                    'caption' => 'Guthaben'
-                ]
-            ]
-        ];
-
-        $form['elements'][] = [
-            'type'    => 'ExpansionPanel',
             'caption' => 'NeXXt Mobile',
             'items'   => [
                 [
@@ -512,6 +485,45 @@ trait AANM_Config
                     'type'    => 'SelectTime',
                     'name'    => 'AutomaticDeactivationEndTime',
                     'caption' => 'Endzeit'
+                ]
+            ]
+        ];
+
+        //Visualisation
+        $form['elements'][] = [
+            'type'    => 'ExpansionPanel',
+            'caption' => 'Visualisierung',
+            'items'   => [
+                [
+                    'type'    => 'Label',
+                    'caption' => 'WebFront',
+                    'bold'    => true,
+                    'italic'  => true
+                ],
+                [
+                    'type'    => 'Label',
+                    'caption' => 'Anzeigeoptionen',
+                    'italic'  => true
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableActive',
+                    'caption' => 'Aktiv'
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableAlarmCall',
+                    'caption' => 'Alarmanruf'
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableGetCurrentBalance',
+                    'caption' => 'Guthaben abfragen'
+                ],
+                [
+                    'type'    => 'CheckBox',
+                    'name'    => 'EnableCurrentBalance',
+                    'caption' => 'Guthaben'
                 ]
             ]
         ];
