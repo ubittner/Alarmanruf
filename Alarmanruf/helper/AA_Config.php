@@ -161,10 +161,10 @@ trait AA_Config
             $stateName = 'fehlerhaft';
             $rowColor = '#FFC0C0'; //red
             if ($conditions) {
-                $stateName = 'Bedingung nicht erfüllt!'; //GetValueFormatted($sensorID);
+                $stateName = 'Bedingung nicht erfüllt!';
                 $rowColor = '#C0FFC0'; //light green
                 if (IPS_IsConditionPassing($variable['PrimaryCondition']) && IPS_IsConditionPassing($variable['SecondaryCondition'])) {
-                    $stateName = 'Bedingung erfüllt'; //$this->ReadPropertyString('OpenText');
+                    $stateName = 'Bedingung erfüllt';
                     $rowColor = '#C0C0FF'; //violett
                 }
                 if (!$variable['Use']) {
