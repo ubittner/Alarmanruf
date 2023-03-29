@@ -162,10 +162,10 @@ trait AA_Config
             $rowColor = '#FFC0C0'; //red
             if ($conditions) {
                 $stateName = 'Bedingung nicht erfüllt!';
-                $rowColor = '#C0FFC0'; //light green
+                $rowColor = '#C0C0FF'; //violett
                 if (IPS_IsConditionPassing($variable['PrimaryCondition']) && IPS_IsConditionPassing($variable['SecondaryCondition'])) {
                     $stateName = 'Bedingung erfüllt';
-                    $rowColor = '#C0C0FF'; //violett
+                    $rowColor = '#C0FFC0'; //light green
                 }
                 if (!$variable['Use']) {
                     $stateName = 'Deaktiviert';
