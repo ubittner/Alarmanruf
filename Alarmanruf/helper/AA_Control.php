@@ -51,6 +51,7 @@ trait AA_Control
             $result = true;
             $timestamp = date('d.m.Y, H:i:s');
             $actualAlarmCallState = $this->GetValue('AlarmCall');
+            $location = $this->ReadPropertyString('Location');
             //Deactivate
             if (!$State) {
                 $this->SendDebug(__FUNCTION__, 'Der Alarmanruf wird beendet', 0);
@@ -77,7 +78,12 @@ trait AA_Control
                         $text = 'Fehler, der Alarmanruf konnte nicht beendet werden!';
                         $this->LogMessage('ID ' . $this->InstanceID . ', ' . __FUNCTION__ . ', ' . $text, KL_ERROR);
                         //Protocol
-                        $this->UpdateAlarmProtocol($timestamp . ', ' . $text . ' (ID ' . $id . ')', 0);
+                        if ($location == '') {
+                            $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        } else {
+                            $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        }
+                        $this->UpdateAlarmProtocol($logText, 0);
                         return false;
                     }
                     $response = @RequestAction($id, false);
@@ -98,7 +104,13 @@ trait AA_Control
                 if ($result) {
                     //Protocol
                     if ($actualAlarmCallState) {
-                        $this->UpdateAlarmProtocol($timestamp . ', Der Alarmanruf wurde beendet' . '. (ID ' . $id . ')', 0);
+                        $text = 'Der Alarmanruf wurde beendet';
+                        if ($location == '') {
+                            $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        } else {
+                            $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        }
+                        $this->UpdateAlarmProtocol($logText, 0);
                     }
                 } else {
                     //Revert on failure
@@ -109,7 +121,12 @@ trait AA_Control
                     $this->LogMessage('ID ' . $this->InstanceID . ', ' . __FUNCTION__ . ', ' . $text, KL_ERROR);
                     //Protocol
                     if ($actualAlarmCallState) {
-                        $this->UpdateAlarmProtocol($timestamp . ', ' . $text . ' (ID ' . $id . ')', 0);
+                        if ($location == '') {
+                            $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        } else {
+                            $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        }
+                        $this->UpdateAlarmProtocol($logText, 0);
                     }
                 }
             }
@@ -128,7 +145,12 @@ trait AA_Control
                     $this->SendDebug(__FUNCTION__, $text, 0);
                     if (!$actualAlarmCallState) {
                         //Protocol
-                        $this->UpdateAlarmProtocol($timestamp . ', ' . $text . '. (ID ' . $id . ')', 0);
+                        if ($location == '') {
+                            $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        } else {
+                            $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                        }
+                        $this->UpdateAlarmProtocol($logText, 0);
                     }
                 } //No delay, activate alarm call immediately
                 else {
@@ -221,6 +243,7 @@ trait AA_Control
         }
         $result = false;
         $id = $this->ReadPropertyInteger('AlarmCall');
+        $location = $this->ReadPropertyString('Location');
         if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
             $result = true;
             $timestamp = date('d.m.Y, H:i:s');
@@ -247,7 +270,12 @@ trait AA_Control
                     $text = 'Fehler, der Alarmanruf konnte nicht gestartet werden!';
                     $this->LogMessage('ID ' . $this->InstanceID . ', ' . __FUNCTION__ . ', ' . $text, KL_ERROR);
                     //Protocol
-                    $this->UpdateAlarmProtocol($timestamp . ', ' . $text . ' (ID ' . $id . ')', 0);
+                    if ($location == '') {
+                        $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    } else {
+                        $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    }
+                    $this->UpdateAlarmProtocol($logText, 0);
                     return false;
                 }
                 $response = @RequestAction($id, true);
@@ -277,7 +305,13 @@ trait AA_Control
                 }
                 //Protocol
                 if ($actualAlarmCallState) {
-                    $this->UpdateAlarmProtocol($timestamp . ', Der Alarmanruf wurde gestartet' . '. (ID ' . $id . ')', 0);
+                    $text = 'Der Alarmanruf wurde gestartet';
+                    if ($location == '') {
+                        $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    } else {
+                        $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    }
+                    $this->UpdateAlarmProtocol($logText, 0);
                 }
             } else {
                 //Revert on failure
@@ -288,7 +322,12 @@ trait AA_Control
                 $this->LogMessage('ID ' . $this->InstanceID . ', ' . __FUNCTION__ . ', ' . $text, KL_ERROR);
                 //Protocol
                 if ($actualAlarmCallState) {
-                    $this->UpdateAlarmProtocol($timestamp . ', ' . $text . ' (ID ' . $id . ')', 0);
+                    if ($location == '') {
+                        $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    } else {
+                        $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    }
+                    $this->UpdateAlarmProtocol($logText, 0);
                 }
             }
         }

@@ -56,6 +56,7 @@ class AlarmanrufNeXXtMobile extends IPSModule
         $this->RegisterPropertyString('TriggerList', '[]');
         //Alarm protocol
         $this->RegisterPropertyInteger('AlarmProtocol', 0);
+        $this->RegisterPropertyString('Location', '');
         //Automatic deactivation
         $this->RegisterPropertyBoolean('UseAutomaticDeactivation', false);
         $this->RegisterPropertyString('AutomaticDeactivationStartTime', '{"hour":22,"minute":0,"second":0}');

@@ -555,6 +555,12 @@ trait AAVOIP_Config
                             'objectID' => $alarmProtocol
                         ]
                     ]
+                ],
+                [
+                    'type'    => 'ValidationTextBox',
+                    'name'    => 'Location',
+                    'caption' => 'Standortbezeichnung (z.B. Musterstraße 1)',
+                    'width'   => '600px'
                 ]
             ]
         ];

@@ -53,6 +53,7 @@ class Alarmanruf extends IPSModule
         $this->RegisterPropertyString('TriggerList', '[]');
         //Alarm protocol
         $this->RegisterPropertyInteger('AlarmProtocol', 0);
+        $this->RegisterPropertyString('Location', '');
         //Command control
         $this->RegisterPropertyInteger('CommandControl', 0);
         //Automatic deactivation

@@ -111,6 +111,7 @@ trait AANM_Control
         $result = true;
         $timestamp = date('d.m.Y, H:i:s');
         $actualAlarmCallState = $this->GetValue('AlarmCall');
+        $location = $this->ReadPropertyString('Location');
         //Deactivate
         if (!$State) {
             $this->SendDebug(__FUNCTION__, 'Der Alarmanruf wird beendet', 0);
@@ -118,7 +119,13 @@ trait AANM_Control
             $this->SetValue('AlarmCall', false);
             //Protocol
             if ($actualAlarmCallState) {
-                $this->UpdateAlarmProtocol($timestamp . ', Der Alarmanruf wurde beendet' . '. (ID ' . $this->InstanceID . ')', 0);
+                $text = 'Der Alarmanruf wurde beendet';
+                if ($location == '') {
+                    $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                } else {
+                    $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                }
+                $this->UpdateAlarmProtocol($logText, 0);
             }
         }
         //Activate
@@ -137,7 +144,12 @@ trait AANM_Control
                 $this->SendDebug(__FUNCTION__, $text, 0);
                 if (!$actualAlarmCallState) {
                     //Protocol
-                    $this->UpdateAlarmProtocol($timestamp . ', ' . $text . '. (ID ' . $this->InstanceID . ')', 0);
+                    if ($location == '') {
+                        $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    } else {
+                        $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+                    }
+                    $this->UpdateAlarmProtocol($logText, 0);
                 }
             } //No delay, activate alarm call immediately
             else {
@@ -166,6 +178,8 @@ trait AANM_Control
             return false;
         }
         $this->SetValue('AlarmCall', true);
+        $location = $this->ReadPropertyString('Location');
+        $timestamp = date('d.m.Y, H:i:s');
         $result = false;
         $announcement = $this->ReadAttributeString('Announcement');
         if (empty($announcement)) {
@@ -187,7 +201,12 @@ trait AANM_Control
             $text = 'Der Alarmanruf wurde erfolgreich ausgelöst';
             $this->SendDebug(__FUNCTION__, $text, 0);
             //Protocol
-            $this->UpdateAlarmProtocol($text . '. (ID ' . $this->InstanceID . ')', 0);
+            if ($location == '') {
+                $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+            } else {
+                $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+            }
+            $this->UpdateAlarmProtocol($logText, 0);
             $this->ToggleAlarmCall(false, '');
             //Get current balance
             $this->SetTimerInterval('GetCurrentBalance', 30 * 1000);
@@ -198,7 +217,12 @@ trait AANM_Control
             $this->SendDebug(__FUNCTION__, $text, 0);
             $this->LogMessage('ID ' . $this->InstanceID . ', ' . __FUNCTION__ . ', ' . $text, KL_ERROR);
             //Protocol
-            $this->UpdateAlarmProtocol($text . ' (ID ' . $this->InstanceID . ')', 0);
+            if ($location == '') {
+                $logText = $timestamp . ', ' . $text . ' (ID ' . $this->InstanceID . ')';
+            } else {
+                $logText = $timestamp . ', ' . $this->ReadPropertyString('Location') . ', Alarmanruf, ' . $text . ' (ID ' . $this->InstanceID . ')';
+            }
+            $this->UpdateAlarmProtocol($logText, 0);
         }
         return $result;
     }
