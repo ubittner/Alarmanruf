@@ -34,7 +34,7 @@ trait AANM_AlarmProtocol
             return;
         }
         $id = $this->ReadPropertyInteger('AlarmProtocol');
-        if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+        if ($id > 1 && @IPS_ObjectExists($id)) {
             @AP_UpdateMessages($id, $LogText, $LogType);
         }
     }

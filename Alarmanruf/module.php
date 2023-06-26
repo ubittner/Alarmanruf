@@ -25,9 +25,9 @@ class Alarmanruf extends IPSModule
     use AA_TriggerConditions;
 
     //Constants
-    private const MODULE_NAME = 'Alarmanruf';
+    private const LIBRARY_GUID = '{5EF26FF6-6DD0-C972-1F7A-BC3CBA516042}';
+    private const MODULE_GUID = '{FA8543F8-C672-8E9F-A5A9-90103612EBFA}';
     private const MODULE_PREFIX = 'AA';
-    private const MODULE_VERSION = '7.0-1, 24.10.2022';
     private const ALARMPROTOCOL_MODULE_GUID = '{66BDB59B-E80F-E837-6640-005C32D5FC24}';
     private const ABLAUFSTEUERUNG_MODULE_GUID = '{0559B287-1052-A73E-B834-EBD9B62CB938}';
     private const ABLAUFSTEUERUNG_MODULE_PREFIX = 'AST';
@@ -121,7 +121,7 @@ class Alarmanruf extends IPSModule
         $names[] = ['propertyName' => 'CommandControl', 'useUpdate' => false];
         foreach ($names as $name) {
             $id = $this->ReadPropertyInteger($name['propertyName']);
-            if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+            if ($id > 1 && @IPS_ObjectExists($id)) {
                 $this->RegisterReference($id);
                 if ($name['useUpdate']) {
                     $this->RegisterMessage($id, VM_UPDATE);
@@ -140,7 +140,7 @@ class Alarmanruf extends IPSModule
                 if (array_key_exists(0, $primaryCondition)) {
                     if (array_key_exists(0, $primaryCondition[0]['rules']['variable'])) {
                         $id = $primaryCondition[0]['rules']['variable'][0]['variableID'];
-                        if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+                        if ($id > 1 && @IPS_ObjectExists($id)) {
                             $this->RegisterReference($id);
                             $this->RegisterMessage($id, VM_UPDATE);
                         }
@@ -156,7 +156,7 @@ class Alarmanruf extends IPSModule
                         foreach ($rules as $rule) {
                             if (array_key_exists('variableID', $rule)) {
                                 $id = $rule['variableID'];
-                                if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+                                if ($id > 1 && @IPS_ObjectExists($id)) {
                                     $this->RegisterReference($id);
                                 }
                             }
@@ -216,6 +216,38 @@ class Alarmanruf extends IPSModule
         }
     }
 
+    public function CreateAlarmProtocolInstance(): void
+    {
+        $id = @IPS_CreateInstance(self::ALARMPROTOCOL_MODULE_GUID);
+        if (is_int($id)) {
+            IPS_SetName($id, 'Alarmprotokoll');
+            $infoText = 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
+        } else {
+            $infoText = 'Instanz konnte nicht erstellt werden!';
+        }
+        $this->UpdateFormField('InfoMessage', 'visible', true);
+        $this->UpdateFormField('InfoMessageLabel', 'caption', $infoText);
+    }
+
+    public function CreateCommandControlInstance(): void
+    {
+        $id = IPS_CreateInstance(self::ABLAUFSTEUERUNG_MODULE_GUID);
+        if (is_int($id)) {
+            IPS_SetName($id, 'Ablaufsteuerung');
+            $infoText = 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
+        } else {
+            $infoText = 'Instanz konnte nicht erstellt werden!';
+        }
+        $this->UpdateFormField('InfoMessage', 'visible', true);
+        $this->UpdateFormField('InfoMessageLabel', 'caption', $infoText);
+    }
+
+    public function UIShowMessage(string $Message): void
+    {
+        $this->UpdateFormField('InfoMessage', 'visible', true);
+        $this->UpdateFormField('InfoMessageLabel', 'caption', $Message);
+    }
+
     #################### Request Action
 
     public function RequestAction($Ident, $Value)
@@ -232,28 +264,6 @@ class Alarmanruf extends IPSModule
                 $this->ToggleAlarmCall($Value);
                 break;
 
-        }
-    }
-
-    public function CreateAlarmProtocolInstance(): void
-    {
-        $id = @IPS_CreateInstance(self::ALARMPROTOCOL_MODULE_GUID);
-        if (is_int($id)) {
-            IPS_SetName($id, 'Alarmprotokoll');
-            echo 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
-        } else {
-            echo 'Instanz konnte nicht erstellt werden!';
-        }
-    }
-
-    public function CreateCommandControlInstance(): void
-    {
-        $id = IPS_CreateInstance(self::ABLAUFSTEUERUNG_MODULE_GUID);
-        if (is_int($id)) {
-            IPS_SetName($id, 'Ablaufsteuerung');
-            echo 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
-        } else {
-            echo 'Instanz konnte nicht erstellt werden!';
         }
     }
 

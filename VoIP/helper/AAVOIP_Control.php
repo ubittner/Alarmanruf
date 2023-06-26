@@ -212,7 +212,7 @@ trait AAVOIP_Control
         }
         //Call recipient
         $voipID = $this->ReadPropertyInteger('VoIP');
-        if ($voipID <= 1 || @!IPS_ObjectExists($voipID)) { //0 = main category, 1 = none
+        if ($voipID <= 1 || @!IPS_ObjectExists($voipID)) {
             return false;
         }
         $pollyID = $this->ReadPropertyInteger('TTSAWSPolly');
@@ -227,7 +227,7 @@ trait AAVOIP_Control
             }
         }
         VoIP_Disconnect(' . $voipID . ', $id);';
-        if ($pollyID > 1 && @IPS_ObjectExists($pollyID)) { //0 = main category, 1 = none
+        if ($pollyID > 1 && @IPS_ObjectExists($pollyID)) {
             $scriptText = '
             $id = VoIP_Connect(' . $voipID . ', "' . $PhoneNumber . '");
             for($i = 0; $i < ' . $duration . '; $i++) {
