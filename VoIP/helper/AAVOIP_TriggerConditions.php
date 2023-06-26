@@ -76,7 +76,7 @@ trait AAVOIP_TriggerConditions
                                     case 1: //On
                                         $announcement = $variable['Announcement'];
                                         $triggeringDetector = $variable['TriggeringDetector'];
-                                        if ($triggeringDetector > 1 && @IPS_ObjectExists($triggeringDetector)) { //0 = main category, 1 = none
+                                        if ($triggeringDetector > 1 && @IPS_ObjectExists($triggeringDetector)) {
                                             $announcement = sprintf($announcement, GetValueString($triggeringDetector));
                                         }
                                         $this->SendDebug(__FUNCTION__, $announcement, 0);

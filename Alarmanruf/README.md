@@ -59,13 +59,15 @@ Das Modul Alarmanruf reagiert auf verschiedene Auslöser.
 Das Modul Alarmanruf kann über eine externe Aktion geschaltet werden.  
 Nachfolgendes Beispiel löst einen Alarmanruf aus.
 
-> AA_ToggleAlarmCall(12345, true);
+```php
+AA_ToggleAlarmCall(12345, true);
+```
 
 ### 6. PHP-Befehlsreferenz
 
 #### 6.1 Alarmanruf schalten
 
-```
+```text
 boolean AA_ToggleAlarmCall(integer INSTANCE_ID, boolean STATE);
 ```
 
@@ -77,5 +79,9 @@ Konnte der Befehl erfolgreich ausgeführt werden, liefert er als Ergebnis **TRUE
 | `STATE`       | false | Aus            |
 |               | true  | An             |
 
-Beispiel:
-> AA_ToggleAlarmCall(12345, false);
+**Beispiel**:
+```php
+AA_ToggleAlarmCall(12345, false);
+```
+
+---

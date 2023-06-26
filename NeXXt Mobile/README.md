@@ -57,13 +57,15 @@ Das Modul Alarmanruf NeXXt Mobile reagiert auf verschiedene Auslöser.
 Das Modul Alarmanruf NeXXt Mobile kann über eine externe Aktion geschaltet werden.  
 Nachfolgendes Beispiel beendet einen Alarmanruf.
 
-> AANM_ToggleAlarmCall(12345, false, '');
+```php
+AANM_ToggleAlarmCall(12345, false, '');
+```
 
 ### 6. PHP-Befehlsreferenz
 
 #### 6.1 Alarmanruf schalten
 
-```
+```text
 boolean AANM_ToggleAlarmCall(integer INSTANCE_ID, boolean STATE, string ANNOUNCEMENT);
 ```
 
@@ -76,5 +78,9 @@ Konnte der Befehl erfolgreich ausgeführt werden, liefert er als Ergebnis **TRUE
 |                | true  | An             |
 | `ANNOUNCEMENT` |       | Ansage         |
 
-Beispiel:
-> AANM_ToggleAlarmCall(12345, false, 'Es wurde ein Alarm ausgelöst!');
+**Beispiel**:
+```php
+AANM_ToggleAlarmCall(12345, false, 'Es wurde ein Alarm ausgelöst!');
+```
+
+---

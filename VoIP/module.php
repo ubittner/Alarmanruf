@@ -25,9 +25,9 @@ class AlarmanrufVoIP extends IPSModule
     use AAVOIP_TriggerConditions;
 
     //Constants
-    private const MODULE_NAME = 'Alarmanruf VoIP';
+    private const LIBRARY_GUID = '{5EF26FF6-6DD0-C972-1F7A-BC3CBA516042}';
+    private const MODULE_GUID = '{87E8FFF5-2E89-8C9E-3345-9A09D159E4B2}';
     private const MODULE_PREFIX = 'AAVOIP';
-    private const MODULE_VERSION = '7.0-1, 24.10.2022';
     private const VOIP_MODULE_GUID = '{A4224A63-49EA-445F-8422-22EF99D8F624}';
     private const TTSAWSPOLLY_MODULE_GUID = '{6EFA02E1-360F-4120-B3DE-31EFCDAF0BAF}';
     private const ALARMPROTOCOL_MODULE_GUID = '{66BDB59B-E80F-E837-6640-005C32D5FC24}';
@@ -124,7 +124,7 @@ class AlarmanrufVoIP extends IPSModule
         $names[] = ['propertyName' => 'AlarmProtocol', 'useUpdate' => false];
         foreach ($names as $name) {
             $id = $this->ReadPropertyInteger($name['propertyName']);
-            if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+            if ($id > 1 && @IPS_ObjectExists($id)) {
                 $this->RegisterReference($id);
                 if ($name['useUpdate']) {
                     $this->RegisterMessage($id, VM_UPDATE);
@@ -143,7 +143,7 @@ class AlarmanrufVoIP extends IPSModule
                 if (array_key_exists(0, $primaryCondition)) {
                     if (array_key_exists(0, $primaryCondition[0]['rules']['variable'])) {
                         $id = $primaryCondition[0]['rules']['variable'][0]['variableID'];
-                        if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+                        if ($id > 1 && @IPS_ObjectExists($id)) {
                             $this->RegisterReference($id);
                             $this->RegisterMessage($id, VM_UPDATE);
                         }
@@ -159,7 +159,7 @@ class AlarmanrufVoIP extends IPSModule
                         foreach ($rules as $rule) {
                             if (array_key_exists('variableID', $rule)) {
                                 $id = $rule['variableID'];
-                                if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+                                if ($id > 1 && @IPS_ObjectExists($id)) {
                                     $this->RegisterReference($id);
                                 }
                             }
@@ -220,6 +220,51 @@ class AlarmanrufVoIP extends IPSModule
         }
     }
 
+    public function CreateVoIPInstance(): void
+    {
+        $id = @IPS_CreateInstance(self::VOIP_MODULE_GUID);
+        if (is_int($id)) {
+            IPS_SetName($id, 'VoIP');
+            $infoText = 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
+        } else {
+            $infoText = 'Instanz konnte nicht erstellt werden!';
+        }
+        $this->UpdateFormField('InfoMessage', 'visible', true);
+        $this->UpdateFormField('InfoMessageLabel', 'caption', $infoText);
+    }
+
+    public function CreateTTSAWSPollyInstance(): void
+    {
+        $id = @IPS_CreateInstance(self::TTSAWSPOLLY_MODULE_GUID);
+        if (is_int($id)) {
+            IPS_SetName($id, 'Text to Speech (AWS Polly)');
+            $infoText = 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
+        } else {
+            $infoText = 'Instanz konnte nicht erstellt werden!';
+        }
+        $this->UpdateFormField('InfoMessage', 'visible', true);
+        $this->UpdateFormField('InfoMessageLabel', 'caption', $infoText);
+    }
+
+    public function CreateAlarmProtocolInstance(): void
+    {
+        $id = @IPS_CreateInstance(self::ALARMPROTOCOL_MODULE_GUID);
+        if (is_int($id)) {
+            IPS_SetName($id, 'Alarmprotokoll');
+            $infoText = 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
+        } else {
+            $infoText = 'Instanz konnte nicht erstellt werden!';
+        }
+        $this->UpdateFormField('InfoMessage', 'visible', true);
+        $this->UpdateFormField('InfoMessageLabel', 'caption', $infoText);
+    }
+
+    public function UIShowMessage(string $Message): void
+    {
+        $this->UpdateFormField('InfoMessage', 'visible', true);
+        $this->UpdateFormField('InfoMessageLabel', 'caption', $Message);
+    }
+
     #################### Request Action
 
     public function RequestAction($Ident, $Value)
@@ -236,39 +281,6 @@ class AlarmanrufVoIP extends IPSModule
                 $this->ToggleAlarmCall($Value, '');
                 break;
 
-        }
-    }
-
-    public function CreateVoIPInstance(): void
-    {
-        $id = @IPS_CreateInstance(self::VOIP_MODULE_GUID);
-        if (is_int($id)) {
-            IPS_SetName($id, 'VoIP');
-            echo 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
-        } else {
-            echo 'Instanz konnte nicht erstellt werden!';
-        }
-    }
-
-    public function CreateTTSAWSPollyInstance(): void
-    {
-        $id = @IPS_CreateInstance(self::TTSAWSPOLLY_MODULE_GUID);
-        if (is_int($id)) {
-            IPS_SetName($id, 'Text to Speech (AWS Polly)');
-            echo 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
-        } else {
-            echo 'Instanz konnte nicht erstellt werden!';
-        }
-    }
-
-    public function CreateAlarmProtocolInstance(): void
-    {
-        $id = @IPS_CreateInstance(self::ALARMPROTOCOL_MODULE_GUID);
-        if (is_int($id)) {
-            IPS_SetName($id, 'Alarmprotokoll');
-            echo 'Instanz mit der ID ' . $id . ' wurde erfolgreich erstellt!';
-        } else {
-            echo 'Instanz konnte nicht erstellt werden!';
         }
     }
 

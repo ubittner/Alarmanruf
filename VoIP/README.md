@@ -57,13 +57,15 @@ Das Modul Alarmanruf VoIP reagiert auf verschiedene Auslöser.
 Das Modul Alarmanruf VoIP kann über eine externe Aktion geschaltet werden.  
 Nachfolgendes Beispiel beendet einen Alarmanruf.
 
-> AAVOIP_ToggleAlarmCall(12345, false, '');
+```php
+AAVOIP_ToggleAlarmCall(12345, false, '');
+```
 
 ### 6. PHP-Befehlsreferenz
 
 #### 6.1 Alarmanruf schalten
 
-```
+```text
 boolean AAVOIP_ToggleAlarmCall(integer INSTANCE_ID, boolean STATE, string ANNOUNCEMENT);
 ```
 
@@ -76,5 +78,9 @@ Konnte der Befehl erfolgreich ausgeführt werden, liefert er als Ergebnis **TRUE
 |                | true  | An             |
 | `ANNOUNCEMENT` |       | Ansage         |
 
-Beispiel:
-> AAVOIP_ToggleAlarmCall(12345, false, 'Es wurde ein Alarm ausgelöst!');
+**Beispiel**:
+```php
+AAVOIP_ToggleAlarmCall(12345, false, 'Es wurde ein Alarm ausgelöst!');
+```
+
+---

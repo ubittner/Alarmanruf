@@ -47,7 +47,7 @@ trait AA_Control
         }
         $result = false;
         $id = $this->ReadPropertyInteger('AlarmCall');
-        if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+        if ($id > 1 && @IPS_ObjectExists($id)) {
             $result = true;
             $timestamp = date('d.m.Y, H:i:s');
             $actualAlarmCallState = $this->GetValue('AlarmCall');
@@ -59,7 +59,7 @@ trait AA_Control
                 $this->SetTimerInterval('DeactivateAlarmCall', 0);
                 $this->SetValue('AlarmCall', false);
                 $commandControl = $this->ReadPropertyInteger('CommandControl');
-                if ($commandControl > 1 && @IPS_ObjectExists($commandControl)) { //0 = main category, 1 = none
+                if ($commandControl > 1 && @IPS_ObjectExists($commandControl)) {
                     $commands = [];
                     $commands[] = '@RequestAction(' . $id . ', ' . $value . ');';
                     $this->SendDebug(__FUNCTION__, 'Befehl: ' . json_encode(json_encode($commands)), 0);
@@ -244,14 +244,14 @@ trait AA_Control
         $result = false;
         $id = $this->ReadPropertyInteger('AlarmCall');
         $location = $this->ReadPropertyString('Location');
-        if ($id > 1 && @IPS_ObjectExists($id)) { //0 = main category, 1 = none
+        if ($id > 1 && @IPS_ObjectExists($id)) {
             $result = true;
             $timestamp = date('d.m.Y, H:i:s');
             $actualAlarmCallState = $this->GetValue('AlarmCall');
             $this->SendDebug(__FUNCTION__, 'Der Alarmanruf wird gestartet', 0);
             $this->SetValue('AlarmCall', true);
             $commandControl = $this->ReadPropertyInteger('CommandControl');
-            if ($commandControl > 1 && @IPS_ObjectExists($commandControl)) { //0 = main category, 1 = none
+            if ($commandControl > 1 && @IPS_ObjectExists($commandControl)) {
                 $commands = [];
                 $commands[] = '@RequestAction(' . $id . ', ' . true . ');';
                 $this->SendDebug(__FUNCTION__, 'Befehl: ' . json_encode(json_encode($commands)), 0);
