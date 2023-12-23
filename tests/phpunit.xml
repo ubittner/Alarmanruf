@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit>
+    <php>
+        <const name="PHPUNIT_TESTSUITE" value="true"/>
+    </php>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../Alarmanruf</directory>
+            <directory suffix=".php">../NeXXt Mobile</directory>
+            <directory suffix=".php">../VoIP</directory>
+        </whitelist>
+    </filter>
+</phpunit>
