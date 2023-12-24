@@ -1,14 +1,15 @@
 <?php
 
 /**
- * @project       AlarmanrufNeXXt Mobile
+ * @project       Alarmanruf/NeXXt Mobile/
  * @file          module.php
  * @author        Ulrich Bittner
- * @copyright     2022 Ulrich Bittner
+ * @copyright     2023 Ulrich Bittner
  * @license       https://creativecommons.org/licenses/by-nc-sa/4.0/ CC BY-NC-SA 4.0
  */
 
 /** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection SpellCheckingInspection */
 /** @noinspection DuplicatedCode */
 /** @noinspection PhpUnused */
 
@@ -20,7 +21,7 @@ class AlarmanrufNeXXtMobile extends IPSModule
 {
     //Helper
     use AANM_AlarmProtocol;
-    use AANM_Config;
+    use AANM_ConfigurationForm;
     use AANM_Control;
     use AANM_TriggerConditions;
 

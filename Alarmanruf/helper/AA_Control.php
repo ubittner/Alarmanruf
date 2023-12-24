@@ -1,17 +1,17 @@
 <?php
 
 /**
- * @project       Alarmanruf/Alarmanruf
+ * @project       Alarmanruf/Alarmanruf/helper/
  * @file          AA_Control.php
  * @author        Ulrich Bittner
- * @copyright     2022 Ulrich Bittner
+ * @copyright     2023 Ulrich Bittner
  * @license       https://creativecommons.org/licenses/by-nc-sa/4.0/ CC BY-NC-SA 4.0
  */
 
 /** @noinspection PhpVoidFunctionResultUsedInspection */
 /** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection SpellCheckingInspection */
 /** @noinspection DuplicatedCode */
-/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 

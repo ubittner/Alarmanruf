@@ -1,14 +1,15 @@
 <?php
 
 /**
- * @project       Alarmanruf/Alarmanruf
+ * @project       Alarmanruf/Alarmanruf/
  * @file          module.php
  * @author        Ulrich Bittner
- * @copyright     2022 Ulrich Bittner
+ * @copyright     2023 Ulrich Bittner
  * @license       https://creativecommons.org/licenses/by-nc-sa/4.0/ CC BY-NC-SA 4.0
  */
 
 /** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection SpellCheckingInspection */
 /** @noinspection DuplicatedCode */
 /** @noinspection PhpUnused */
 
@@ -20,7 +21,7 @@ class Alarmanruf extends IPSModule
 {
     //Helper
     use AA_AlarmProtocol;
-    use AA_Config;
+    use AA_ConfigurationForm;
     use AA_Control;
     use AA_TriggerConditions;
 

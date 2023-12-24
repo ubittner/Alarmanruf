@@ -1,14 +1,15 @@
 <?php
 
 /**
- * @project       AlarmanrufVoIP
+ * @project       Alarmanruf/VoIP/helper
  * @file          module.php
  * @author        Ulrich Bittner
- * @copyright     2022 Ulrich Bittner
+ * @copyright     2023 Ulrich Bittner
  * @license       https://creativecommons.org/licenses/by-nc-sa/4.0/ CC BY-NC-SA 4.0
  */
 
 /** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection SpellCheckingInspection */
 /** @noinspection DuplicatedCode */
 /** @noinspection PhpUnused */
 
@@ -20,7 +21,7 @@ class AlarmanrufVoIP extends IPSModule
 {
     //Helper
     use AAVOIP_AlarmProtocol;
-    use AAVOIP_Config;
+    use AAVOIP_ConfigurationForm;
     use AAVOIP_Control;
     use AAVOIP_TriggerConditions;
 

@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @project       AlarmanrufVoIP
- * @file          AAVOIP_Config.php
+ * @project       Alarmanruf/Alarmanruf/helper/
+ * @file          AA_ConfigurationForm.php
  * @author        Ulrich Bittner
- * @copyright     2022 Ulrich Bittner
+ * @copyright     2023 Ulrich Bittner
  * @license       https://creativecommons.org/licenses/by-nc-sa/4.0/ CC BY-NC-SA 4.0
  */
 
-/** @noinspection PhpUndefinedFunctionInspection */
+/** @noinspection SpellCheckingInspection */
 /** @noinspection DuplicatedCode */
 
 declare(strict_types=1);
 
-trait AAVOIP_Config
+trait AA_ConfigurationForm
 {
     /**
      * Reloads the configuration form.
@@ -58,6 +58,17 @@ trait AAVOIP_Config
         $this->UpdateFormField($Field, 'caption', $Caption);
         $this->UpdateFormField($Field, 'visible', $state);
         $this->UpdateFormField($Field, 'objectID', $ObjectID);
+    }
+
+    public function ModifyActualVariableStatesConfigurationButton(string $Field, int $VariableID): void
+    {
+        $state = false;
+        if ($VariableID > 1 && @IPS_ObjectExists($VariableID)) {
+            $state = true;
+        }
+        $this->UpdateFormField($Field, 'caption', 'ID ' . $VariableID . ' Bearbeiten');
+        $this->UpdateFormField($Field, 'visible', $state);
+        $this->UpdateFormField($Field, 'objectID', $VariableID);
     }
 
     /**
@@ -136,7 +147,7 @@ trait AAVOIP_Config
                 ],
                 [
                     'type'    => 'Label',
-                    'caption' => "Modul:\t\tAlarmanruf VoIP"
+                    'caption' => "Modul:\t\t" . $module['ModuleName']
                 ],
                 [
                     'type'    => 'Label',
@@ -163,157 +174,58 @@ trait AAVOIP_Config
             ]
         ];
 
-        //VoIP
-        $voip = $this->ReadPropertyInteger('VoIP');
-        $enableVoIPButton = false;
-        if ($voip > 1 && @IPS_ObjectExists($voip)) {
-            $enableVoIPButton = true;
+        //Alarm call
+        $alarmCall = $this->ReadPropertyInteger('AlarmCall');
+        $enableAlarmCallButton = false;
+        if ($alarmCall > 1 && @IPS_ObjectExists($alarmCall)) {
+            $enableAlarmCallButton = true;
         }
 
         $form['elements'][] = [
             'type'    => 'ExpansionPanel',
             'name'    => 'Panel2',
-            'caption' => 'VoIP',
+            'caption' => 'Alarmanruf',
             'items'   => [
                 [
                     'type'  => 'RowLayout',
                     'items' => [
                         [
-                            'type'     => 'SelectModule',
-                            'name'     => 'VoIP',
-                            'caption'  => 'Instanz',
+                            'type'     => 'SelectVariable',
+                            'name'     => 'AlarmCall',
+                            'caption'  => 'Variable',
                             'width'    => '600px',
-                            'moduleID' => self::VOIP_MODULE_GUID,
-                            'onChange' => self::MODULE_PREFIX . '_ModifyButton($id, "VoIPConfigurationButton", "ID " . $VoIP . " konfigurieren", $VoIP);'
+                            'onChange' => self::MODULE_PREFIX . '_ModifyButton($id, "AlarmCallConfigurationButton", "ID " . $AlarmCall . " bearbeiten", $AlarmCall);'
                         ],
                         [
                             'type'     => 'OpenObjectButton',
-                            'name'     => 'VoIPConfigurationButton',
-                            'caption'  => 'ID ' . $voip . ' konfigurieren',
-                            'visible'  => $enableVoIPButton,
-                            'objectID' => $voip
-                        ],
-                        [
-                            'type'    => 'Button',
-                            'caption' => 'Neue Instanz erstellen',
-                            'onClick' => self::MODULE_PREFIX . '_CreateVoIPInstance($id);'
+                            'name'     => 'AlarmCallConfigurationButton',
+                            'caption'  => 'ID ' . $alarmCall . ' bearbeiten',
+                            'visible'  => $enableAlarmCallButton,
+                            'objectID' => $alarmCall
                         ]
                     ]
                 ],
                 [
                     'type'    => 'NumberSpinner',
-                    'name'    => 'AlarmCallDelay',
-                    'caption' => 'Anrufverzögerung',
+                    'name'    => 'AlarmCallSwitchingDelay',
+                    'caption' => 'Schaltverzögerung',
+                    'minimum' => 0,
+                    'suffix'  => 'Millisekunden'
+                ],
+                [
+                    'type'    => 'NumberSpinner',
+                    'name'    => 'AlarmCallSwitchOnDelay',
+                    'caption' => 'Einschaltverzögerung',
                     'minimum' => 0,
                     'suffix'  => 'Sekunden'
                 ],
                 [
                     'type'    => 'NumberSpinner',
-                    'name'    => 'VoIPDuration',
-                    'caption' => 'Verbindungsdauer',
-                    'minimum' => 10,
-                    'maximum' => 25,
+                    'name'    => 'AlarmCallSwitchOnDuration',
+                    'caption' => 'Impulsdauer',
+                    'minimum' => 0,
+                    'maximum' => 30,
                     'suffix'  => 'Sekunden'
-                ]
-            ]
-        ];
-
-        //Text to speech
-        $tts = $this->ReadPropertyInteger('TTSAWSPolly');
-        $enableTTSButton = false;
-        if ($tts > 1 && @IPS_ObjectExists($tts)) {
-            $enableTTSButton = true;
-        }
-
-        $form['elements'][] = [
-            'type'    => 'ExpansionPanel',
-            'name'    => 'Panel3',
-            'caption' => 'Text to Speech',
-            'items'   => [
-                [
-                    'type'  => 'RowLayout',
-                    'items' => [
-                        [
-                            'type'     => 'SelectModule',
-                            'name'     => 'TTSAWSPolly',
-                            'caption'  => 'Text to Speech (AWS Polly)',
-                            'width'    => '600px',
-                            'moduleID' => self::TTSAWSPOLLY_MODULE_GUID,
-                            'onChange' => self::MODULE_PREFIX . '_ModifyButton($id, "TTSConfigurationButton", "ID " . $TTSAWSPolly . " konfigurieren", $TTSAWSPolly);'
-                        ],
-                        [
-                            'type'     => 'OpenObjectButton',
-                            'name'     => 'TTSConfigurationButton',
-                            'caption'  => 'ID ' . $tts . ' konfigurieren',
-                            'visible'  => $enableTTSButton,
-                            'objectID' => $tts
-                        ],
-                        [
-                            'type'    => 'Button',
-                            'caption' => 'Neue Instanz erstellen',
-                            'onClick' => self::MODULE_PREFIX . '_CreateTTSAWSPollyInstance($id);'
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
-        $form['elements'][] = [
-            'type'    => 'ExpansionPanel',
-            'name'    => 'Panel4',
-            'caption' => 'Anrufliste',
-            'items'   => [
-                [
-                    'type'      => 'ValidationTextBox',
-                    'name'      => 'DefaultAnnouncement',
-                    'caption'   => 'Standardansage',
-                    'width'     => '600px',
-                    'multiline' => true
-                ],
-                [
-                    'type'    => 'Label',
-                    'caption' => ' '
-                ],
-                [
-                    'type'     => 'List',
-                    'name'     => 'Recipients',
-                    'caption'  => 'Telefonnummern',
-                    'rowCount' => 5,
-                    'add'      => true,
-                    'delete'   => true,
-                    'sort'     => [
-                        'column'    => 'Name',
-                        'direction' => 'ascending'
-                    ],
-                    'columns' => [
-                        [
-                            'caption' => 'Aktiviert',
-                            'name'    => 'Use',
-                            'width'   => '100px',
-                            'add'     => true,
-                            'edit'    => [
-                                'type' => 'CheckBox'
-                            ]
-                        ],
-                        [
-                            'caption' => 'Name',
-                            'name'    => 'Name',
-                            'width'   => '400px',
-                            'add'     => '',
-                            'edit'    => [
-                                'type' => 'ValidationTextBox'
-                            ]
-                        ],
-                        [
-                            'caption' => 'Rufnummer',
-                            'name'    => 'PhoneNumber',
-                            'width'   => '300px',
-                            'add'     => '+49',
-                            'edit'    => [
-                                'type' => 'ValidationTextBox'
-                            ]
-                        ]
-                    ]
                 ]
             ]
         ];
@@ -321,6 +233,11 @@ trait AAVOIP_Config
         //Trigger list
         $triggerListValues = [];
         $variables = json_decode($this->ReadPropertyString('TriggerList'), true);
+        $amountRows = count($variables) + 1;
+        if ($amountRows == 1) {
+            $amountRows = 3;
+        }
+        $amountVariables = count($variables);
         foreach ($variables as $variable) {
             $sensorID = 0;
             if ($variable['PrimaryCondition'] != '') {
@@ -352,33 +269,87 @@ trait AAVOIP_Config
                     }
                 }
             }
-            $stateName = 'fehlerhaft';
             $rowColor = '#FFC0C0'; //red
             if ($conditions) {
-                $stateName = 'Bedingung nicht erfüllt!';
-                $rowColor = '#C0C0FF'; //violett
-                if (IPS_IsConditionPassing($variable['PrimaryCondition']) && IPS_IsConditionPassing($variable['SecondaryCondition'])) {
-                    $stateName = 'Bedingung erfüllt';
-                    $rowColor = '#C0FFC0'; //light green
-                }
+                $rowColor = '#C0FFC0'; //light green
                 if (!$variable['Use']) {
-                    $stateName = 'Deaktiviert';
                     $rowColor = '#DFDFDF'; //grey
                 }
             }
-            $triggerListValues[] = ['ActualStatus' => $stateName, 'SensorID' => $sensorID, 'rowColor' => $rowColor];
+            $triggerListValues[] = ['rowColor' => $rowColor];
         }
 
         $form['elements'][] = [
             'type'    => 'ExpansionPanel',
-            'name'    => 'Panel5',
+            'name'    => 'Panel3',
             'caption' => 'Auslöser',
             'items'   => [
+                [
+                    'type'    => 'PopupButton',
+                    'caption' => 'Aktueller Status',
+                    'popup'   => [
+                        'caption' => 'Aktueller Status',
+                        'items'   => [
+                            [
+                                'type'     => 'List',
+                                'name'     => 'ActualVariableStateList',
+                                'caption'  => 'Variablen',
+                                'add'      => false,
+                                'rowCount' => 1,
+                                'sort'     => [
+                                    'column'    => 'ActualStatus',
+                                    'direction' => 'ascending'
+                                ],
+                                'columns' => [
+                                    [
+                                        'name'    => 'ActualStatus',
+                                        'caption' => 'Aktueller Status',
+                                        'width'   => '250px',
+                                        'save'    => false
+                                    ],
+                                    [
+                                        'name'    => 'SensorID',
+                                        'caption' => 'ID',
+                                        'width'   => '80px',
+                                        'onClick' => self::MODULE_PREFIX . '_ModifyActualVariableStatesConfigurationButton($id, "ActualVariableStateConfigurationButton", $ActualVariableStateList["SensorID"]);',
+                                        'save'    => false
+                                    ],
+                                    [
+                                        'name'    => 'Designation',
+                                        'caption' => 'Bezeichnung',
+                                        'width'   => '400px',
+                                        'save'    => false
+                                    ],
+                                    [
+                                        'name'    => 'AlarmCallAction',
+                                        'caption' => 'Alarmanruf',
+                                        'width'   => '250px',
+                                        'save'    => false
+                                    ],
+                                    [
+                                        'name'    => 'LastUpdate',
+                                        'caption' => 'Letzte Aktualisierung',
+                                        'width'   => '200px',
+                                        'save'    => false
+                                    ]
+                                ]
+                            ],
+                            [
+                                'type'     => 'OpenObjectButton',
+                                'name'     => 'ActualVariableStateConfigurationButton',
+                                'caption'  => 'Bearbeiten',
+                                'visible'  => false,
+                                'objectID' => 0
+                            ]
+                        ]
+                    ],
+                    'onClick' => self::MODULE_PREFIX . '_GetActualVariableStates($id);'
+                ],
                 [
                     'type'     => 'List',
                     'name'     => 'TriggerList',
                     'caption'  => 'Auslöser',
-                    'rowCount' => 5,
+                    'rowCount' => $amountRows,
                     'add'      => true,
                     'delete'   => true,
                     'columns'  => [
@@ -392,19 +363,6 @@ trait AAVOIP_Config
                             ]
                         ],
                         [
-                            'name'    => 'ActualStatus',
-                            'caption' => 'Aktueller Status',
-                            'width'   => '200px',
-                            'add'     => ''
-                        ],
-                        [
-                            'caption' => 'ID',
-                            'name'    => 'SensorID',
-                            'onClick' => self::MODULE_PREFIX . '_ModifyTriggerListButton($id, "TriggerListConfigurationButton", $TriggerList["PrimaryCondition"]);',
-                            'width'   => '100px',
-                            'add'     => ''
-                        ],
-                        [
                             'caption' => 'Bezeichnung',
                             'name'    => 'Designation',
                             'onClick' => self::MODULE_PREFIX . '_ModifyTriggerListButton($id, "TriggerListConfigurationButton", $TriggerList["PrimaryCondition"]);',
@@ -412,28 +370,6 @@ trait AAVOIP_Config
                             'add'     => '',
                             'edit'    => [
                                 'type' => 'ValidationTextBox'
-                            ]
-                        ],
-                        [
-                            'caption' => ' ',
-                            'name'    => 'SpacerPrimaryCondition',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type' => 'Label'
-                            ]
-                        ],
-                        [
-                            'caption' => 'Bedingung:',
-                            'name'    => 'LabelPrimaryCondition',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type'   => 'Label',
-                                'italic' => true,
-                                'bold'   => true
                             ]
                         ],
                         [
@@ -446,68 +382,22 @@ trait AAVOIP_Config
                             ]
                         ],
                         [
-                            'caption' => ' ',
+                            'caption' => 'Primäre Bedingung',
                             'name'    => 'PrimaryCondition',
-                            'width'   => '200px',
+                            'width'   => '1000px',
                             'add'     => '',
-                            'visible' => false,
                             'edit'    => [
                                 'type' => 'SelectCondition'
                             ]
                         ],
                         [
-                            'caption' => ' ',
-                            'name'    => 'SpacerSecondaryCondition',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type' => 'Label'
-                            ]
-                        ],
-                        [
-                            'caption' => 'Weitere Bedingung(en):',
-                            'name'    => 'LabelSecondaryCondition',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type'   => 'Label',
-                                'italic' => true,
-                                'bold'   => true
-                            ]
-                        ],
-                        [
-                            'caption' => ' ',
+                            'caption' => 'Weitere Bedingungen',
                             'name'    => 'SecondaryCondition',
-                            'width'   => '200px',
+                            'width'   => '1000px',
                             'add'     => '',
-                            'visible' => false,
                             'edit'    => [
                                 'type'  => 'SelectCondition',
                                 'multi' => true
-                            ]
-                        ],
-                        [
-                            'caption' => ' ',
-                            'name'    => 'SpacerAlarmCallAction',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type' => 'Label'
-                            ]
-                        ],
-                        [
-                            'caption' => 'Alarmanruf:',
-                            'name'    => 'LabelAlarmCall',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type'   => 'Label',
-                                'italic' => true,
-                                'bold'   => true
                             ]
                         ],
                         [
@@ -532,73 +422,13 @@ trait AAVOIP_Config
                                     ]
                                 ]
                             ]
-                        ],
-                        [
-                            'caption' => ' ',
-                            'name'    => 'SpacerTriggeringDetector',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type' => 'Label'
-                            ]
-                        ],
-                        [
-                            'caption' => 'Auslösender Melder:',
-                            'name'    => 'LabelTriggeringDetector',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type'   => 'Label',
-                                'italic' => true,
-                                'bold'   => true
-                            ]
-                        ],
-                        [
-                            'caption' => 'Auslösender Melder:',
-                            'name'    => 'TriggeringDetector',
-                            'width'   => '200px',
-                            'add'     => 0,
-                            'visible' => false,
-                            'edit'    => [
-                                'type' => 'SelectVariable'
-                            ]
-                        ],
-                        [
-                            'caption' => ' ',
-                            'name'    => 'SpacerAnnouncement',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type' => 'Label'
-                            ]
-                        ],
-                        [
-                            'caption' => 'Ansagetext:',
-                            'name'    => 'LabelAnnouncement',
-                            'width'   => '200px',
-                            'add'     => '',
-                            'visible' => false,
-                            'edit'    => [
-                                'type'   => 'Label',
-                                'italic' => true,
-                                'bold'   => true
-                            ]
-                        ],
-                        [
-                            'caption' => 'Ansagetext',
-                            'name'    => 'Announcement',
-                            'width'   => '800px',
-                            'add'     => 'Hinweis %1$s hat einen Alarm ausgelöst. Ich wiederhole %1$s hat einen Alarm ausgelöst.',
-                            'visible' => false,
-                            'edit'    => [
-                                'type' => 'ValidationTextBox'
-                            ]
                         ]
                     ],
                     'values' => $triggerListValues,
+                ],
+                [
+                    'type'    => 'Label',
+                    'caption' => 'Anzahl Auslöser: ' . $amountVariables
                 ],
                 [
                     'type'     => 'OpenObjectButton',
@@ -619,7 +449,7 @@ trait AAVOIP_Config
 
         $form['elements'][] = [
             'type'    => 'ExpansionPanel',
-            'name'    => 'Panel6',
+            'name'    => 'Panel4',
             'caption' => 'Alarmprotokoll',
             'items'   => [
                 [
@@ -631,7 +461,7 @@ trait AAVOIP_Config
                             'caption'  => 'Instanz',
                             'moduleID' => self::ALARMPROTOCOL_MODULE_GUID,
                             'width'    => '600px',
-                            'onChange' => self::MODULE_PREFIX . '_ModifyButton($id, "AlarmProtocolConfigurationButton", "ID " . $AlarmProtocol . " konfigurieren", $AlarmProtocol);'
+                            'onChange' => self::MODULE_PREFIX . '_ModifyButton($id, "AlarmProtocolConfigurationButton", "ID " . $AlarmProtocol . " Instanzkonfiguration", $AlarmProtocol);'
                         ],
                         [
                             'type'     => 'OpenObjectButton',
@@ -656,9 +486,48 @@ trait AAVOIP_Config
             ]
         ];
 
+        //Command control
+        $commandControl = $this->ReadPropertyInteger('CommandControl');
+        $enableButton = false;
+        if ($commandControl > 1 && @IPS_ObjectExists($commandControl)) {
+            $enableButton = true;
+        }
         $form['elements'][] = [
             'type'    => 'ExpansionPanel',
-            'name'    => 'Panel7',
+            'name'    => 'Panel5',
+            'caption' => 'Ablaufsteuerung',
+            'items'   => [
+                [
+                    'type'  => 'RowLayout',
+                    'items' => [
+                        [
+                            'type'     => 'SelectModule',
+                            'name'     => 'CommandControl',
+                            'caption'  => 'Instanz',
+                            'moduleID' => self::ABLAUFSTEUERUNG_MODULE_GUID,
+                            'width'    => '600px',
+                            'onChange' => self::MODULE_PREFIX . '_ModifyButton($id, "CommandControlConfigurationButton", "ID " . $CommandControl . " konfigurieren", $CommandControl);'
+                        ],
+                        [
+                            'type'     => 'OpenObjectButton',
+                            'caption'  => 'ID ' . $commandControl . ' konfigurieren',
+                            'name'     => 'CommandControlConfigurationButton',
+                            'visible'  => $enableButton,
+                            'objectID' => $commandControl
+                        ],
+                        [
+                            'type'    => 'Button',
+                            'caption' => 'Neue Instanz erstellen',
+                            'onClick' => self::MODULE_PREFIX . '_CreateCommandControlInstance($id);'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $form['elements'][] = [
+            'type'    => 'ExpansionPanel',
+            'name'    => 'Panel6',
             'caption' => 'Deaktivierung',
             'items'   => [
                 [
@@ -682,7 +551,7 @@ trait AAVOIP_Config
         //Visualisation
         $form['elements'][] = [
             'type'    => 'ExpansionPanel',
-            'name'    => 'Panel8',
+            'name'    => 'Panel7',
             'caption' => 'Visualisierung',
             'items'   => [
                 [
@@ -700,6 +569,12 @@ trait AAVOIP_Config
 
         ########## Actions
 
+        $form['actions'][] =
+            [
+                'type'    => 'Label',
+                'caption' => 'Schaltelemente'
+            ];
+
         //Test center
         $form['actions'][] =
             [
@@ -715,27 +590,40 @@ trait AAVOIP_Config
         //Registered references
         $registeredReferences = [];
         $references = $this->GetReferenceList();
+        $amountReferences = count($references);
+        if ($amountReferences == 0) {
+            $amountReferences = 3;
+        }
         foreach ($references as $reference) {
             $name = 'Objekt #' . $reference . ' existiert nicht';
+            $location = '';
             $rowColor = '#FFC0C0'; //red
             if (@IPS_ObjectExists($reference)) {
                 $name = IPS_GetName($reference);
+                $location = IPS_GetLocation($reference);
                 $rowColor = '#C0FFC0'; //light green
             }
             $registeredReferences[] = [
-                'ObjectID' => $reference,
-                'Name'     => $name,
-                'rowColor' => $rowColor];
+                'ObjectID'         => $reference,
+                'Name'             => $name,
+                'VariableLocation' => $location,
+                'rowColor'         => $rowColor];
         }
 
         //Registered messages
         $registeredMessages = [];
         $messages = $this->GetMessageList();
+        $amountMessages = count($messages);
+        if ($amountMessages == 0) {
+            $amountMessages = 3;
+        }
         foreach ($messages as $id => $messageID) {
             $name = 'Objekt #' . $id . ' existiert nicht';
+            $location = '';
             $rowColor = '#FFC0C0'; //red
             if (@IPS_ObjectExists($id)) {
                 $name = IPS_GetName($id);
+                $location = IPS_GetLocation($id);
                 $rowColor = '#C0FFC0'; //light green
             }
             switch ($messageID) {
@@ -753,6 +641,7 @@ trait AAVOIP_Config
             $registeredMessages[] = [
                 'ObjectID'           => $id,
                 'Name'               => $name,
+                'VariableLocation'   => $location,
                 'MessageID'          => $messageID,
                 'MessageDescription' => $messageDescription,
                 'rowColor'           => $rowColor];
@@ -764,10 +653,15 @@ trait AAVOIP_Config
             'caption' => 'Entwicklerbereich',
             'items'   => [
                 [
+                    'type'    => 'Label',
+                    'caption' => 'Registrierte Referenzen',
+                    'bold'    => true,
+                    'italic'  => true
+                ],
+                [
                     'type'     => 'List',
                     'name'     => 'RegisteredReferences',
-                    'caption'  => 'Registrierte Referenzen',
-                    'rowCount' => 10,
+                    'rowCount' => $amountReferences,
                     'sort'     => [
                         'column'    => 'ObjectID',
                         'direction' => 'ascending'
@@ -777,13 +671,17 @@ trait AAVOIP_Config
                             'caption' => 'ID',
                             'name'    => 'ObjectID',
                             'width'   => '150px',
-                            'onClick' => self::MODULE_PREFIX . '_ModifyButton($id, "RegisteredReferencesConfigurationButton", "ID " . $RegisteredReferences["ObjectID"] . " aufrufen", $RegisteredReferences["ObjectID"]);'
+                            'onClick' => self::MODULE_PREFIX . '_ModifyButton($id, "RegisteredReferencesConfigurationButton", "ID " . $RegisteredReferences["ObjectID"] . " bearbeiten", $RegisteredReferences["ObjectID"]);'
                         ],
                         [
                             'caption' => 'Name',
                             'name'    => 'Name',
                             'width'   => '300px',
-                            'onClick' => self::MODULE_PREFIX . '_ModifyButton($id, "RegisteredReferencesConfigurationButton", "ID " . $RegisteredReferences["ObjectID"] . " aufrufen", $RegisteredReferences["ObjectID"]);'
+                        ],
+                        [
+                            'caption' => 'Objektbaum',
+                            'name'    => 'VariableLocation',
+                            'width'   => '700px'
                         ]
                     ],
                     'values' => $registeredReferences
@@ -791,7 +689,7 @@ trait AAVOIP_Config
                 [
                     'type'     => 'OpenObjectButton',
                     'name'     => 'RegisteredReferencesConfigurationButton',
-                    'caption'  => 'Aufrufen',
+                    'caption'  => 'Bearbeiten',
                     'visible'  => false,
                     'objectID' => 0
                 ],
@@ -800,10 +698,15 @@ trait AAVOIP_Config
                     'caption' => ' '
                 ],
                 [
+                    'type'    => 'Label',
+                    'caption' => 'Registrierte Nachrichten',
+                    'bold'    => true,
+                    'italic'  => true
+                ],
+                [
                     'type'     => 'List',
                     'name'     => 'RegisteredMessages',
-                    'caption'  => 'Registrierte Nachrichten',
-                    'rowCount' => 10,
+                    'rowCount' => $amountMessages,
                     'sort'     => [
                         'column'    => 'ObjectID',
                         'direction' => 'ascending'
@@ -813,13 +716,17 @@ trait AAVOIP_Config
                             'caption' => 'ID',
                             'name'    => 'ObjectID',
                             'width'   => '150px',
-                            'onClick' => self::MODULE_PREFIX . '_ModifyButton($id, "RegisteredMessagesConfigurationButton", "ID " . $RegisteredMessages["ObjectID"] . " aufrufen", $RegisteredMessages["ObjectID"]);'
+                            'onClick' => self::MODULE_PREFIX . '_ModifyButton($id, "RegisteredMessagesConfigurationButton", "ID " . $RegisteredMessages["ObjectID"] . " bearbeiten", $RegisteredMessages["ObjectID"]);'
                         ],
                         [
                             'caption' => 'Name',
                             'name'    => 'Name',
                             'width'   => '300px',
-                            'onClick' => self::MODULE_PREFIX . '_ModifyButton($id, "RegisteredMessagesConfigurationButton", "ID " . $RegisteredMessages["ObjectID"] . " aufrufen", $RegisteredMessages["ObjectID"]);'
+                        ],
+                        [
+                            'caption' => 'Objektbaum',
+                            'name'    => 'VariableLocation',
+                            'width'   => '700px'
                         ],
                         [
                             'caption' => 'Nachrichten ID',
@@ -837,7 +744,7 @@ trait AAVOIP_Config
                 [
                     'type'     => 'OpenObjectButton',
                     'name'     => 'RegisteredMessagesConfigurationButton',
-                    'caption'  => 'Aufrufen',
+                    'caption'  => 'Bearbeiten',
                     'visible'  => false,
                     'objectID' => 0
                 ]
@@ -868,22 +775,22 @@ trait AAVOIP_Config
         $form['status'][] = [
             'code'    => 101,
             'icon'    => 'active',
-            'caption' => 'Alarmanruf VoIP wird erstellt',
+            'caption' => $module['ModuleName'] . ' wird erstellt',
         ];
         $form['status'][] = [
             'code'    => 102,
             'icon'    => 'active',
-            'caption' => 'Alarmanruf VoIP ist aktiv',
+            'caption' => $module['ModuleName'] . ' ist aktiv',
         ];
         $form['status'][] = [
             'code'    => 103,
             'icon'    => 'active',
-            'caption' => 'Alarmanruf VoIP wird gelöscht',
+            'caption' => $module['ModuleName'] . ' wird gelöscht',
         ];
         $form['status'][] = [
             'code'    => 104,
             'icon'    => 'inactive',
-            'caption' => 'Alarmanruf VoIP ist inaktiv',
+            'caption' => $module['ModuleName'] . ' ist inaktiv',
         ];
         $form['status'][] = [
             'code'    => 200,
