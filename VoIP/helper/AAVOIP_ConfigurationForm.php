@@ -483,7 +483,7 @@ trait AAVOIP_ConfigurationForm
                         [
                             'caption' => 'Primäre Bedingung',
                             'name'    => 'PrimaryCondition',
-                            'width'   => '200px',
+                            'width'   => '1000px',
                             'add'     => '',
                             'edit'    => [
                                 'type' => 'SelectCondition'
@@ -492,7 +492,7 @@ trait AAVOIP_ConfigurationForm
                         [
                             'caption' => 'Weitere Bedingungen',
                             'name'    => 'SecondaryCondition',
-                            'width'   => '200px',
+                            'width'   => '1000px',
                             'add'     => '',
                             'edit'    => [
                                 'type'  => 'SelectCondition',
